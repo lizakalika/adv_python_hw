@@ -1,0 +1,57 @@
+class Shape(object):
+    
+    def __init__(self):
+        pass
+    
+    def __str__(self):
+        return f'I\'m a {type(self).__name__} with perimeter P = {self.perimeter()} and area A = {self.area()}!'
+    
+    def area(self):
+        pass
+    
+    def perimeter(self):
+        pass
+        
+
+
+
+class Quadrilateral(Shape):
+    
+    def __init__(self, p1, p2, p3, p4):
+        self.P1, self.P2, self.P3, self.P4 = p1, p2, p3, p4
+        self.a = p1.distance(p2)
+        self.b = p2.distance(p3)
+        self.c = p3.distance(p4)
+        self.d = p4.distance(p1)
+        self.alpha = np.arccos(p1.cos(p2, p4))
+        self.beta = np.arccos(p3.cos(p2, p4))
+        
+    def area(self):
+        a, b, c, d = self.a, self.b, self.c, self.d
+        p = (a + b + c + d) / 2
+        A = (p - a) * (p - b) * (p - c) * (p - d)
+        cos_ac = np.cos((self.alpha + self.beta) / 2)
+        return np.sqrt(A - a*b*c*d * cos_ac**2)
+    
+    def perimeter(self):
+        a, b, c, d = self.a, self.b, self.c, self.d
+        return a + b + c + d
+        
+        
+        
+class Square(Quadrilateral):
+    
+    def area(self):
+        return self.a**2
+    
+    def perimeter(self):
+        return self.a*4
+        
+   
+class Rhombus(Quadrilateral):
+    
+    def area(self):
+        return self.a**2 * np.sin(self.alpha)
+    
+    def perimeter(self):
+        return self.a*4
